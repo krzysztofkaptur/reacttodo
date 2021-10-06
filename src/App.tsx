@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router } from 'react-router-dom'
 
-function App() {
+import Header from './components/Header/Header'
+import Todos from './components/Todos/Todos'
+import Form from './components/Form/Form'
+import Nav from './components/Nav/Nav'
+
+import { TodosContextProvider } from './store/todos-context'
+
+import './App.css'
+
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <TodosContextProvider>
+      <Router>
+        <div className="App">
+          <Header title="todos" />
+          <Form />
+          <Todos />
+        </div>
+        <Nav />
+      </Router>
+    </TodosContextProvider>
+  )
 }
 
-export default App;
+export default App
