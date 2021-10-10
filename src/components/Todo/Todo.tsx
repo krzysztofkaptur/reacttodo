@@ -10,10 +10,10 @@ const EditTodo: React.FC<{
   changeMode: () => void
 }> = ({ title, id, changeMode }) => {
   const [newTitle, setNewTitle] = useState(title)
-  const { updateSingleTodo } = useContext(TodosContext)
+  const { updateSingleTodoTitle } = useContext(TodosContext)
 
   const updateTodoTitle = (id: string, newTitle: string) => {
-    updateSingleTodo(id, newTitle)
+    updateSingleTodoTitle(id, newTitle)
     changeMode()
   }
 
