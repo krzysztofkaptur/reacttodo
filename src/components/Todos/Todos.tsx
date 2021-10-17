@@ -8,6 +8,7 @@ import styles from './Todos.module.css'
 
 const Todos: React.FC = () => {
   const { todos } = useContext(TodosContext)
+
   const activeTodos = todos.filter(todo => !todo.completed)
   const completed = todos.filter(todo => todo.completed)
 

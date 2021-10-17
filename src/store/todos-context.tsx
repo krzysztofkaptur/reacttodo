@@ -1,13 +1,15 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
+import axios from 'axios'
 
 import ITodosContextObject from '../interfaces/ITodosContextObject'
 import ITodo from '../interfaces/ITodo'
 
 export const TodosContext = createContext<ITodosContextObject>({
   todos: [],
+  fetchTodos: async () => {},
   addTodo: () => {},
   removeTodo: () => {},
-  updateSingleTodo: () => {},
+  updateSingleTodoTitle: () => {},
   updateCompleted: () => {},
   updateCompletedAll: () => {},
   removeCompleted: () => {}
@@ -17,48 +19,106 @@ export const TodosContextProvider: React.FC<{ children: React.ReactNode }> =
   props => {
     const [todos, setTodos] = useState<ITodo[] | []>([])
 
-    const addTodo = (newTodo: ITodo) => {
-      setTodos([...todos, newTodo])
+    const fetchTodos = async () => {
+      let newValue: any
+      try {
+        const newValueData = await axios.get('/api')
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
     }
 
-    const removeTodo = (id: string) => {
-      const filteredTodos = todos.filter(todo => todo.id !== id)
-      setTodos(filteredTodos)
+    const addTodo = async (newTodo: ITodo) => {
+      let newValue: any
+      try {
+        const newValueData = await axios.post('/api/add/', { newTodo })
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
     }
 
-    const updateSingleTodo = (id: string, newTitle: string) => {
-      const updatedTodos = todos.map(todo =>
-        todo.id === id ? { ...todo, title: newTitle } : todo
-      )
-      setTodos(updatedTodos)
+    const removeTodo = async (id: string) => {
+      let newValue: any
+      try {
+        const newValueData = await axios.delete(`/api/delete/${id}`)
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
     }
 
-    const updateCompleted = (id: string) => {
-      const updatedTodos = todos.map(todo =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-      setTodos(updatedTodos)
+    const updateSingleTodoTitle = async (id: string, newTitle: string) => {
+      let newValue: any
+      try {
+        const newValueData = await axios.patch(`/api/edit/${id}`, { newTitle })
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
     }
 
-    const updateCompletedAll = (value: boolean) => {
-      const updatedTodos = todos.map(todo => ({ ...todo, completed: value }))
-      setTodos(updatedTodos)
+    const updateCompleted = async (id: string) => {
+      let newValue: any
+      try {
+        const newValueData = await axios.patch(`/api/edit/completed/${id}`)
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
     }
 
-    const removeCompleted = () => {
-      const updatedTodos = todos.filter(todo => !todo.completed)
-      setTodos(updatedTodos)
+    const updateCompletedAll = async (value: boolean) => {
+      let newValue: any
+      try {
+        const newValueData = await axios.patch('/api/edit-all', {
+          completed: value
+        })
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
+    }
+
+    const removeCompleted = async () => {
+      let newValue: any
+      try {
+        const newValueData = await axios.delete('/api/delete-completed')
+        newValue = newValueData.data
+      } catch (err) {
+        newValue = []
+      }
+
+      setTodos(newValue)
     }
 
     const sampleContextValue = {
       todos,
+      fetchTodos,
       addTodo,
       removeTodo,
-      updateSingleTodo,
+      updateSingleTodoTitle,
       updateCompleted,
       updateCompletedAll,
       removeCompleted
     }
+
+    useEffect(() => {
+      fetchTodos()
+    }, [])
 
     return (
       <TodosContext.Provider value={sampleContextValue}>

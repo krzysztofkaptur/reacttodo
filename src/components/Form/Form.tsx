@@ -33,12 +33,18 @@ const Form: React.FC = () => {
     <form onSubmit={createAnotherTodo}>
       <div>
         <input
+          role="checkbox"
           type="checkbox"
           checked={isCheckedAll}
           onChange={handleCheckedAll}
         />
         <label htmlFor="">Title:</label>
-        <input type="text" value={newTodo} onChange={updateValue} />
+        <input
+          role="search"
+          type="text"
+          value={newTodo}
+          onChange={updateValue}
+        />
       </div>
       <button type="submit">Click</button>
     </form>
