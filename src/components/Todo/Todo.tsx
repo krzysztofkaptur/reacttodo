@@ -23,7 +23,12 @@ const EditTodo: React.FC<{
 
   return (
     <div>
-      <input type="text" value={newTitle} onChange={updateTitle} />
+      <input
+        type="text"
+        value={newTitle}
+        onChange={updateTitle}
+        data-testid="updateInput"
+      />
       <button onClick={() => updateTodoTitle(id, newTitle)}>Update</button>
     </div>
   )
@@ -42,9 +47,10 @@ const Todo: React.FC<{ todo: ITodo }> = ({ todo }) => {
   }
 
   return (
-    <article className={styles.Todo}>
+    <article className={styles.Todo} data-testid="todo">
       <div>
         <input
+          role="checkbox"
           type="checkbox"
           checked={todo.completed}
           onChange={handleCheckboxChange}
@@ -57,7 +63,9 @@ const Todo: React.FC<{ todo: ITodo }> = ({ todo }) => {
           <h3 onDoubleClick={changeMode}>{todo.title}</h3>
         )}
       </div>
-      <button onClick={() => removeTodo(todo.id)}>Delete</button>
+      <button onClick={() => removeTodo(todo.id)} role="button">
+        Delete
+      </button>
     </article>
   )
 }

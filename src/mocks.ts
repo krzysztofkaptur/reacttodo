@@ -28,12 +28,10 @@ let sampleTodos: ITodo[] = [
 
 export const worker = setupWorker(
   rest.get('/api', (req, res, ctx) => {
-    console.log('/api')
     return res(ctx.json(sampleTodos))
   }),
 
   rest.post<TodoBody>('/api/add/', (req, res, ctx) => {
-    console.log('/api/add/')
     const { newTodo } = req.body
 
     sampleTodos = [...sampleTodos, newTodo]
@@ -41,7 +39,6 @@ export const worker = setupWorker(
   }),
 
   rest.delete('/api/delete/:id', (req, res, ctx) => {
-    console.log('/api/delete/:id')
     const { id } = req.params
 
     sampleTodos = sampleTodos.filter(item => item.id !== id)
@@ -49,7 +46,6 @@ export const worker = setupWorker(
   }),
 
   rest.patch<Title>('/api/edit/:id', (req, res, ctx) => {
-    console.log('/api/edit/:id')
     const { newTitle } = req.body
     const { id } = req.params
 
@@ -60,7 +56,6 @@ export const worker = setupWorker(
   }),
 
   rest.patch('/api/edit/completed/:id', (req, res, ctx) => {
-    console.log('/api/edit/completed/:id')
     const { id } = req.params
 
     sampleTodos = sampleTodos.map(item =>
